@@ -12,7 +12,6 @@ locals {
     workload_admin_group_name : var.workload_admin_group_name != "" ? var.workload_admin_group_name : "OCI-ELZ-UGP-${var.environment_prefix}-${var.workload_prefix}-WRK-ADMIN",
     application_admin_group_name : var.application_admin_group_name != "" ? var.application_admin_group_name : "OCI-ELZ-UGP-${var.environment_prefix}-${var.workload_prefix}-APP-ADMIN",
     database_admin_group_name : var.database_admin_group_name != "" ? var.database_admin_group_name : "OCI-ELZ-UGP-${var.environment_prefix}-${var.workload_prefix}-DB-ADMIN",
-    database_admin_group_name : var.database_admin_group_name != "" ? var.database_admin_group_name : "OCI-ELZ-UGP-${var.environment_prefix}-${var.workload_name}-DB-ADMIN",
     datasafe_admin_group_name : var.datasafe_admin_group_name != "" ? var.datasafe_admin_group_name : "OCI-ELZ-UGP-${var.environment_prefix}-${var.workload_name}-DTSAFE-ADMIN",
     datasafe_reports_group_name : var.datasafe_reports_group_name != "" ? var.datasafe_reports_group_name : "OCI-ELZ-UGP-${var.environment_prefix}-${var.workload_name}-DTSAFE-REPORTS",
   } : {
@@ -132,6 +131,20 @@ module "db_admin_group" {
   source                   = "../../modules/non-default-domain-group"
   idcs_endpoint            = var.idcs_endpoint
   group_display_name       = local.group_names.database_admin_group_name
+}
+
+module "datasafe_admin_group" {
+  count                    = var.enable_datasafe ? 1 : 0
+  source                   = "../../modules/non-default-domain-group"
+  idcs_endpoint            = var.idcs_endpoint
+  group_display_name       = local.group_names.datasafe_admin_group_name
+}
+
+module "datasafe_report_group" {
+  count                    = var.enable_datasafe ? 1 : 0
+  source                   = "../../modules/non-default-domain-group"
+  idcs_endpoint            = var.idcs_endpoint
+  group_display_name       = local.group_names.datasafe_reports_group_name
 }
 
 
